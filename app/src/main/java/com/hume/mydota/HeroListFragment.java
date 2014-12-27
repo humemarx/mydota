@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -204,6 +205,7 @@ public class HeroListFragment extends Fragment
             }
 
             final HeroItem item = getItem(position);
+            holder.image.setImageURI(Uri.parse(Utils.getHeroImageUri(item.keyName)));
             //ImageLoader.getInstance().displayImage(Utils.getHeroImageUri(item.keyName),holder.image, mImageLoadOptions);
             holder.text.setText(item.name_l);
 

@@ -12,7 +12,6 @@ import android.widget.TextView;
  * Created by tcp on 2014/12/25.
  */
 public class MainTabActivity extends ActivityGroup {
-
     @Override
     protected void onCreate(Bundle savedInstacnceState){
         super.onCreate(savedInstacnceState);
@@ -26,9 +25,10 @@ public class MainTabActivity extends ActivityGroup {
         inflater.inflate(R.layout.fragment_itemsdata_grid_item,tabhost.getTabContentView());
         inflater.inflate(R.layout.activity_about,tabhost.getTabContentView());
         TabWidget tabWidget = tabhost.getTabWidget();
+
         tabhost.addTab(tabhost.newTabSpec("tab1")
                 .setIndicator(getString(R.string.main_actionBar_tab_hero))
-                .setContent(new Intent(MainTabActivity.this,herolist.class)));
+                .setContent(new Intent(MainTabActivity.this,MainHerolist.class)));
 
         tabhost.addTab(tabhost.newTabSpec("tab2")
                 .setIndicator(getString(R.string.main_actionBar_tab_item))

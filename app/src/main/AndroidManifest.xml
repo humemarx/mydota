@@ -19,7 +19,7 @@
                     android:value="splitActionBarWhenNarrow" />
             </intent-filter>
         </activity>
-        <activity android:name=".herolist"
+        <activity android:name=".MainHerolist"
             android:label="herolist"></activity>
 
         <!--<activity-->

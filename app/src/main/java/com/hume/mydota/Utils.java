@@ -27,7 +27,6 @@ public final class Utils {
     private final static String s_HeroImage_Format = "assets://heroes_images/%s_full.jpg";
     private final static String s_HeroIcon_Format = "assets://heroes_icons/%s_icon.jpg";
     private final static String s_AbilitiesImage_Format = "assets://abilities_images/%s_hp1.jpg";
-
     /**
      * get Hero image url
      * 
