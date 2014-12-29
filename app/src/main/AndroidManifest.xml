@@ -21,6 +21,12 @@
         </activity>
         <activity android:name=".MainHerolist"
             android:label="herolist"></activity>
+        <activity android:name=".MainItemlist"
+            android:label="itemlist"></activity>
+        <activity android:name=".HeroDetailActivity"
+            android:label="herodetaillist"></activity>
+        <activity android:name=".HeroIntroduceFragment"
+            android:label="Herointroducefragment"></activity>
 
         <!--<activity-->
             <!--android:name=".MainActivity"-->

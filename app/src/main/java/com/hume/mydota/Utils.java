@@ -1,9 +1,11 @@
 package com.hume.mydota;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -23,10 +25,10 @@ import java.lang.reflect.Method;
  * 
  */
 public final class Utils {
-    private final static String s_ItemsImage_Format = "assets://items_images/%s_lg.jpg";
-    private final static String s_HeroImage_Format = "assets://heroes_images/%s_full.jpg";
-    private final static String s_HeroIcon_Format = "assets://heroes_icons/%s_icon.jpg";
-    private final static String s_AbilitiesImage_Format = "assets://abilities_images/%s_hp1.jpg";
+    private final static String s_ItemsImage_Format = "items_images/%s_lg.jpg";
+    private final static String s_HeroImage_Format = "heroes_images/%s_full.jpg";
+    private final static String s_HeroIcon_Format = "heroes_icons/%s_icon.jpg";
+    private final static String s_AbilitiesImage_Format = "abilities_images/%s_hp1.jpg";
     /**
      * get Hero image url
      * 
@@ -120,7 +122,7 @@ public final class Utils {
             return;
         }
         final Intent intent = new Intent(packageContext, HeroDetailActivity.class);
-        //intent.putExtra(HeroDetailActivity.KEY_HERO_DETAIL_KEY_NAME, cItemKeyName);
+        intent.putExtra(HeroDetailActivity.KEY_HERO_DETAIL_KEY_NAME, cItemKeyName);
         packageContext.startActivity(intent);
     }
 
@@ -140,7 +142,24 @@ public final class Utils {
             fm.beginTransaction().add(android.R.id.content, cFragment).commit();
         }
     }
+    /**
+     * execute AsyncTask
+     *
+     * @param task
+     */
+    @SuppressLint("NewApi")
+    public static <Params, Progress, Result> void executeAsyncTask(
+            AsyncTask<Params, Progress, Result> loaderTask, Params... params) {
+        if (loaderTask == null) {
+            return;
+        }
 
+        if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
+            loaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params);
+        } else {
+            loaderTask.execute(params);
+        }
+    }
     /**
      * 字符串数组内指定项存在与否
      * 

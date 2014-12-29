@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:paddingBottom="@dimen/margins_text4"
     android:paddingTop="@dimen/margins_text4"
-    android:id="@+id/herolist">
+    android:id="@+id/herolist"
+    android:background="#ff1a1a1a">
 
     <ImageView
         android:id="@+id/image_hero"
@@ -24,6 +25,7 @@
         android:layout_gravity="center"
         android:paddingTop="@dimen/margins_text"
         android:singleLine="true"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textColor="#ffffffff" />
 
 </LinearLayout>

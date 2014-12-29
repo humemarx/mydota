@@ -24,6 +24,7 @@
         android:layout_gravity="center"
         android:paddingTop="@dimen/margins_text"
         android:singleLine="true"
-        android:text="@string/app_name" />
+        android:text="@string/app_name"
+        android:textColor="#ffffffff" />
 
 </LinearLayout>
