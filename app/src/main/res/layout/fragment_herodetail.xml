@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fadeScrollbars="true"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    tools:context=".HeroDetailActivity"
+    tools:ignore="NestedScrolling,HardcodedText" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/margins_layout" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/image_hero"
+                android:layout_width="@dimen/herodetail_image_width"
+                android:layout_height="@dimen/herodetail_image_height"
+                android:layout_marginRight="@dimen/margins_base"
+                android:adjustViewBounds="false"
+                android:contentDescription="@string/app_name"
+                android:scaleType="fitStart"
+                android:src="@drawable/loading" />
+            <TextView
+                android:id="@+id/text_hero_name_l"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/image_hero"
+                android:text="name"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/text_hero_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_hero_name_l"
+                android:layout_toRightOf="@+id/image_hero"
+                android:text="name" />
+
+            <TextView
+                android:id="@+id/text_hero_roles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_hero_name"
+                android:layout_toRightOf="@+id/image_hero"
+                android:text="roles" />
+
+            <TextView
+                android:id="@+id/text_hero_hp_faction_atk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/text_hero_roles"
+                android:layout_toRightOf="@+id/image_hero"
+                android:text="hp_faction_atk" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="true"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:id="@+id/layout_hero_stats1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_hero_stats2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+
+        <TableLayout
+            android:id="@+id/table_hero_detailstats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </TableLayout>
+
+        <TextView
+            android:id="@+id/text_hero_bio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margins_base"
+            android:text="bio" />
+    </LinearLayout>
+</ScrollView>
