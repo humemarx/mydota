@@ -3,7 +3,7 @@ package com.hume.mydota;
 /**
  * 英雄技能加点实体
  * 
- * @author tupunco
+ * @author tcp
  * 
  */
 public class HeroSkillupItem {

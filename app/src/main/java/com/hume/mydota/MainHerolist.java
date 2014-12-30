@@ -63,12 +63,22 @@ public class MainHerolist extends Activity implements AdapterView.OnItemClickLis
         /*设置监听*/
         herogv.setOnItemClickListener(this);
     }
+
+    /**
+     * 点击网格动作
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(MainHerolist.this,HeroDetailActivity.class);
-        intent.putExtra(HeroDetailActivity.KEY_HERO_DETAIL_KEY_NAME, mHeroList.get(position).keyName);
-        startActivity(intent);
-//        Utils.startHeroDetailActivity(this,(HeroItem)parent.getItemAtPosition(position));
+        Intent intent = new Intent(MainHerolist.this,HeroDetailActivity.class);//跳转
+        Bundle bundle = new Bundle();
+        ArrayList<HeroItem> bundlelist = new ArrayList<HeroItem>();
+        bundlelist.add(mHeroList.get(position));
+        intent.putExtra("heroitem",bundlelist);//传递数据
+        startActivity(intent);//启动新的活动
     }
 
     private Bitmap getImageFromAssetsFile(String fileName)
@@ -87,8 +97,8 @@ public class MainHerolist extends Activity implements AdapterView.OnItemClickLis
         }
 
         return image;
-
     }
+
     class MyViewBinder implements SimpleAdapter.ViewBinder
     {
         /**
@@ -98,8 +108,7 @@ public class MainHerolist extends Activity implements AdapterView.OnItemClickLis
          * 返回值：如果数据绑定到视图返回真，否则返回假
          */
         @Override
-        public boolean setViewValue(View view, Object data,
-                                    String textRepresentation) {
+        public boolean setViewValue(View view, Object data,String textRepresentation) {
             if((view instanceof ImageView)&(data instanceof Bitmap))
             {
                 ImageView iv = (ImageView)view;

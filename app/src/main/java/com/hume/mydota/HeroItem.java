@@ -1,10 +1,12 @@
 package com.hume.mydota;
 
+import java.io.Serializable;
+
 /**
  * 英雄实体
  * Created by tcp on 2014/12/25.
  */
-public class HeroItem {
+public class HeroItem implements Serializable {
     public String keyName;
     /**
      * 属性类型

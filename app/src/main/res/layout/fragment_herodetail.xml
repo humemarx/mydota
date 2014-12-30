@@ -2,13 +2,15 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:clipToPadding="false"
     android:fadeScrollbars="true"
     android:fillViewport="true"
     android:fitsSystemWindows="true"
     tools:context=".HeroDetailActivity"
-    tools:ignore="NestedScrolling,HardcodedText" >
+    tools:ignore="NestedScrolling,HardcodedText"
+    android:id="@+id/myhero_detail_view"
+    android:background="#ff1a1a1a">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +38,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/image_hero"
                 android:text="name"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffffffff" />
 
             <TextView
                 android:id="@+id/text_hero_name"
@@ -44,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_hero_name_l"
                 android:layout_toRightOf="@+id/image_hero"
-                android:text="name" />
+                android:text="name"
+                android:textColor="#ffffffff" />
 
             <TextView
                 android:id="@+id/text_hero_roles"
@@ -52,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_hero_name"
                 android:layout_toRightOf="@+id/image_hero"
-                android:text="roles" />
+                android:text="roles"
+                android:textColor="#ffffffff" />
 
             <TextView
                 android:id="@+id/text_hero_hp_faction_atk"
@@ -60,7 +65,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/text_hero_roles"
                 android:layout_toRightOf="@+id/image_hero"
-                android:text="hp_faction_atk" />
+                android:text="hp_faction_atk"
+                android:textColor="#ffffffff" />
         </RelativeLayout>
 
         <LinearLayout
@@ -97,6 +103,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margins_base"
-            android:text="bio" />
+            android:text="bio"
+            android:textColor="#ffffffff"
+            android:background="#ff1a1a1a" />
     </LinearLayout>
 </ScrollView>

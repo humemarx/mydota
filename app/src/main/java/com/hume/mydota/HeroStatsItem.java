@@ -3,6 +3,7 @@
  */
 package com.hume.mydota;
 
+import java.io.Serializable;
 import java.util.Locale;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Locale;
  *
  * @author tupunco
  */
-public final class HeroStatsItem {
+public final class HeroStatsItem implements Serializable {
     /**
      * 初始力量
      */

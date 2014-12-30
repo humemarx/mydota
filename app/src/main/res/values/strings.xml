@@ -20,7 +20,7 @@
     <!-- herodetail -->
     <string name="herodetail_introduce">基本介绍</string>
     <string name="herodetail_skill">技能加点</string>
-    <string name="herodetail_items">初装推荐</string>
+    <string name="herodetail_items">出装推荐</string>
     <string name="herodetail_tips">使用技巧</string>
     <string name="herodetail_video">教学视频</string>
     <!-- menu -->

@@ -27,6 +27,10 @@
             android:label="herodetaillist"></activity>
         <activity android:name=".HeroIntroduceFragment"
             android:label="Herointroducefragment"></activity>
+        <activity android:name=".HeroItemsFragment"
+            android:label="heroitemfragment"></activity>
+        <activity android:name=".HeroSkillFragment"
+            android:label="heroskillfragment"></activity>
 
         <!--<activity-->
             <!--android:name=".MainActivity"-->

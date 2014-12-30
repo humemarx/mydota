@@ -4,35 +4,37 @@
     android:id="@+id/tabherodetail"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#ff1a1a1a">
     <LinearLayout android:orientation="vertical" android:layout_width="fill_parent" android:layout_height="fill_parent">
         <!-- TabWidget的id属性必须为 @android:id/tabs-->
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
             android:background="#ff0d171a">
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/icon_hero"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/antimage_icon"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp" />
+                android:adjustViewBounds="true"
+                android:layout_marginLeft="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:id="@+id/text_heroname"
-                android:textSize="@dimen/abc_text_size_medium_material"
+                android:textSize="@dimen/abc_text_size_large_material"
                 android:layout_gravity="center"
-                android:layout_margin="20dp"
-                android:textColor="#ffffffff" />
+                android:textColor="#ffffffff"
+                android:layout_marginLeft="10dp" />
         </LinearLayout>
 
         <TabWidget android:id="@android:id/tabs" android:orientation="horizontal" android:layout_width="fill_parent"
@@ -40,7 +42,7 @@
             android:background="#ff1a1a1a"
             android:divider="#ff531512" />
         <!-- FrameLayout的id属性必须为 @android:id/tabcontent-->
-        <FrameLayout android:id="@android:id/tabcontent" android:layout_width="fill_parent" android:layout_height="fill_parent">
+        <FrameLayout android:id="@android:id/tabcontent" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="#ff1a1a1a">
             <TextView android:id="@+id/view1" android:layout_width="fill_parent" android:layout_height="fill_parent"
                 android:background="#ff0d171a" />
             <TextView android:id="@+id/view2" android:layout_width="fill_parent" android:layout_height="fill_parent"

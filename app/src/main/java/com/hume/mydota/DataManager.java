@@ -261,8 +261,7 @@ public final class DataManager {
      * @throws java.io.IOException
      * @throws JSONException
      */
-    public synchronized static ItemsItem getItemsItem(Context cContext,
-            String keyName) throws IOException, JSONException {
+    public synchronized static ItemsItem getItemsItem(Context cContext,String keyName) throws IOException, JSONException {
         tryLoadItemsData(cContext);
 
         if (TextUtils.isEmpty(keyName))
