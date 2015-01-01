@@ -6,6 +6,9 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -24,7 +27,12 @@ public class HeroDetailActivity extends ActivityGroup {
      * 英雄名称 Intent 参数
      */
     public final static String KEY_HERO_DETAIL_KEY_NAME = "KEY_HERO_DETAIL_KEY_NAME";
-
+    int currentView = 0;
+    private static final int SWIPE_MIN_DISTANCE = 120;
+    private static final int SWIPE_MAX_OFF_PATH = 250;
+    private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+    private static int maxTabIndex = 4;
+    private GestureDetector gestureDetector;
 
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);//设置不确定的进度
@@ -72,6 +80,15 @@ public class HeroDetailActivity extends ActivityGroup {
                 .setIndicator("教学视频")
                 .setContent(R.id.view5));
 
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+        View.OnTouchListener gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                if (gestureDetector.onTouchEvent(event)) {
+                    return true;
+                }
+                return false;
+            }
+        };
         /*设置标签的字体颜色和大小*/
         for(int i=0; i<tabWidget.getTabCount(); ++i){
             TextView tv = (TextView)tabWidget.getChildAt(i).findViewById(android.R.id.title);
@@ -97,5 +114,44 @@ public class HeroDetailActivity extends ActivityGroup {
             e.printStackTrace();
         }
         return image;
+    }
+
+    // 左右滑动刚好页面也有滑动效果
+    class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            TabHost tabHost = (TabHost)findViewById(R.id.tabherodetail);
+            try {
+                if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)
+                    return false;
+                // right to left swipe
+                if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    if (currentView == maxTabIndex) {
+                        currentView = 0;
+                    } else {
+                        currentView++;
+                    }
+                    tabHost.setCurrentTab(currentView);
+                } else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    if (currentView == 0) {
+                        currentView = maxTabIndex;
+                    } else {
+                        currentView--;
+                    }
+                    tabHost.setCurrentTab(currentView);
+                }
+            } catch (Exception e) {
+            }
+            return false;
+        }
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (gestureDetector.onTouchEvent(event)) {
+            event.setAction(MotionEvent.ACTION_CANCEL);
+        }
+        return super.dispatchTouchEvent(event);
     }
 }
