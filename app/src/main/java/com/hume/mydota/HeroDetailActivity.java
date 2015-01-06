@@ -39,7 +39,8 @@ public class HeroDetailActivity extends ActivityGroup {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_herodetail);
 
-        TabHost tabhost = (TabHost)findViewById(R.id.tabherodetail);
+        AnimationTabHost tabhost = (AnimationTabHost)findViewById(R.id.tabherodetail);
+        //TabHost tabhost = (TabHost)findViewById(R.id.tabherodetail);
         tabhost.setup(this.getLocalActivityManager());
         TabWidget tabWidget = tabhost.getTabWidget();
 
@@ -80,6 +81,7 @@ public class HeroDetailActivity extends ActivityGroup {
                 .setIndicator("教学视频")
                 .setContent(R.id.view5));
 
+        tabhost.setOpenAnimation(true);//滑动动画显示
         gestureDetector = new GestureDetector(new MyGestureDetector());
         View.OnTouchListener gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
@@ -119,8 +121,7 @@ public class HeroDetailActivity extends ActivityGroup {
     // 左右滑动刚好页面也有滑动效果
     class MyGestureDetector extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                               float velocityY) {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,float velocityY) {
             TabHost tabHost = (TabHost)findViewById(R.id.tabherodetail);
             try {
                 if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH)

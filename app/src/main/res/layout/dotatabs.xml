@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- TabHost必须包含一个 TabWidget和一个FrameLayout-->
-<TabHost
+<com.hume.mydota.AnimationTabHost
     android:id="@+id/tabhost"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -49,4 +49,4 @@
             <!--<TextView android:id="@+id/view3" android:layout_width="fill_parent" android:layout_height="fill_parent"/>-->
         </FrameLayout>
     </LinearLayout>
-</TabHost>
+</com.hume.mydota.AnimationTabHost>

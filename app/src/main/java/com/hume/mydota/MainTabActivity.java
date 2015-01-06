@@ -26,7 +26,8 @@ public class MainTabActivity extends ActivityGroup {
         super.onCreate(savedInstacnceState);
         setContentView(R.layout.dotatabs);
 
-        TabHost tabhost = (TabHost)findViewById(R.id.tabhost);
+        //TabHost tabhost = (TabHost)findViewById(R.id.tabhost);
+        AnimationTabHost tabhost = (AnimationTabHost)findViewById(R.id.tabhost);
         tabhost.setup(this.getLocalActivityManager());
         LayoutInflater inflater = LayoutInflater.from(this);
         /*添加每个布局显示的内容*/
@@ -47,6 +48,7 @@ public class MainTabActivity extends ActivityGroup {
                 .setIndicator(getString(R.string.main_actionBar_tab_skill))
                 .setContent(R.id.webv_about_desc));
 
+        tabhost.setOpenAnimation(true);
         gestureDetector = new GestureDetector(new MyGestureDetector());
         View.OnTouchListener gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
