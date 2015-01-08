@@ -16,26 +16,24 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * 物品 Adapter
+ * 推荐使用英雄 Adapter
  * 
- * @author tupunco
+ * @author tcp
  */
-public final class ItemsImagesAdapter extends BaseAdapter {
+public final class HeroImagesAdapter extends BaseAdapter {
     private final class ViewHolder {
-        public TextView name;
-        public TextView cost;
+        public TextView text;
         public ImageView image;
     }
-
     private Context mContext = null;
     private final LayoutInflater mInflater;
-    private final List<ItemsItem> mComponents;
+    private final List<HeroItem> mComponents;
 
-    public ItemsImagesAdapter(Context context,List<ItemsItem> items) {
+    public HeroImagesAdapter(Context context, List<HeroItem> items) {
         super();
-        mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mComponents = items;
+        mContext = context;
     }
 
     @Override
@@ -53,28 +51,25 @@ public final class ItemsImagesAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+
         final ViewHolder holder;
         if (convertView == null) {
-            view = mInflater.inflate(R.layout.fragment_itemsdetail_components_grid_item,parent, false);
-
+            view = mInflater.inflate(R.layout.fragment_itemsdetail_hero_grid_item, parent, false);
             holder = new ViewHolder();
-            holder.name = (TextView) view.findViewById(R.id.text_items_name);
-            holder.cost = (TextView) view.findViewById(R.id.text_items_cost);
-            holder.image = (ImageView) view.findViewById(R.id.image_items);
+            holder.text = (TextView) view.findViewById(R.id.text_hero_name);
+            holder.image = (ImageView) view.findViewById(R.id.image_hero);
 
             view.setTag(holder);
-        } else
+        } else {
             holder = (ViewHolder) view.getTag();
-
-        if (holder != null) {
-            final ItemsItem item = (ItemsItem) getItem(position);
-            Bitmap bitmap = getImageFromAssetsFile(Utils.getItemsImageUri(item.keyName));//获取头像
-            holder.image.setImageBitmap(bitmap);
-            holder.name.setText(item.dname_l);
-            holder.cost.setText(String.valueOf(item.cost));
         }
+        final HeroItem item = (HeroItem) getItem(position);
+        Bitmap bitmap = getImageFromAssetsFile(Utils.getHeroImageUri(item.keyName));//获取头像
+        holder.image.setImageBitmap(bitmap);
+        holder.text.setText(item.name_l);
         return view;
     }
+
     /**
      * 获取文件图像
      * @param fileName

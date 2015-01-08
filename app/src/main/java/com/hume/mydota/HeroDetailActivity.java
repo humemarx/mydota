@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
@@ -35,12 +36,11 @@ public class HeroDetailActivity extends ActivityGroup {
     private GestureDetector gestureDetector;
 
     protected void onCreate(Bundle savedInstanceState) {
-//        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);//设置不确定的进度
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);//设置不确定的进度
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_herodetail);
 
         AnimationTabHost tabhost = (AnimationTabHost)findViewById(R.id.tabherodetail);
-        //TabHost tabhost = (TabHost)findViewById(R.id.tabherodetail);
         tabhost.setup(this.getLocalActivityManager());
         TabWidget tabWidget = tabhost.getTabWidget();
 

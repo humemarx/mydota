@@ -7,7 +7,7 @@ import java.util.List;
  * 
  * @author tupunco
  */
-public final class ItemsItem {
+public final class ItemsItem{
     public String keyName;
     /**
      * 合成目标keyName(合成卷轴使用)

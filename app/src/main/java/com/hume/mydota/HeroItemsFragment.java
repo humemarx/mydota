@@ -5,10 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.hume.mydota.view.SimpleGridView;
@@ -18,7 +16,6 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**出装推荐界面
  * Created by tcp on 2014/12/30.
@@ -118,59 +115,27 @@ public class HeroItemsFragment extends FragmentActivity{
      * @param itemsGridResId
      */
     private void bindItembuildsItems(View cView, HeroDetailItem cItem,String cItembuildsKey,int layoutResId, int itemsGridResId) {
-        if (cItem.itembuilds == null || cItem.itembuilds.size() <= 0|| TextUtils.isEmpty(cItembuildsKey))
-            return;
-        final String[] cItemsb = cItem.itembuilds.get(cItembuildsKey);//获取推荐物品名称_keyname
-        if (cItemsb == null || cItemsb.length <= 0)
-            return;
-
-        final SimpleGridView gridview = (SimpleGridView)cView.findViewById(itemsGridResId);
-        ArrayList<HashMap<String,Object>> al = new ArrayList<>();
-        DataManager dataManager = new DataManager();
-        for(int i=0; i<cItemsb.length; ++i){
-            HashMap<String,Object>item = new HashMap<>();
-            ItemsItem itemsItem = null;
-            try {
-                itemsItem = dataManager.getItemsItem(HeroItemsFragment.this,cItemsb[i]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+        if(cItem.itembuilds != null && cItem.itembuilds.size() > 0)
+        {
+            DataManager dataManager = new DataManager();
+            final ArrayList<ItemsItem> cItembuilds = new ArrayList<>();
+            final String[] cItemsb = cItem.itembuilds.get(cItembuildsKey);
+            for(int i=0; i<cItemsb.length; ++i){
+                ItemsItem itemsItem = null;
+                try {
+                    itemsItem = dataManager.getItemsItem(HeroItemsFragment.this,cItemsb[i]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                cItembuilds.add(itemsItem);
             }
-            String imagevalue = Utils.getItemsImageUri(cItemsb[i]);
-            Bitmap bitmap = getImageFromAssetsFile(imagevalue);
-            item.put("image", bitmap);
-            item.put("name",itemsItem.dname_l);//物品名称
-            item.put("cost",String.valueOf(itemsItem.cost));//物品金钱
-            al.add(item);
-        }
-
-        SimpleAdapter simpleadpter = new SimpleAdapter(this,al,R.layout.fragment_itemsdetail_components_grid_item,
-                new String[]{"image","name","cost"},new int[]{R.id.image_items,R.id.text_items_name,R.id.text_items_cost});
-        simpleadpter.setViewBinder(new MyViewBinder());/*绑定外部资源*/
-        gridview.setAdapter(simpleadpter);
-//        gridview.setOnItemClickListener(HeroItemsFragment.this);//设置监听
-        cView.findViewById(layoutResId).setVisibility(View.VISIBLE);
-    }
-
-    class MyViewBinder implements SimpleAdapter.ViewBinder
-    {
-        /**
-         * view：要板顶数据的视图
-         * data：要绑定到视图的数据
-         * textRepresentation：一个表示所支持数据的安全的字符串，结果是data.toString()或空字符串，但不能是Null
-         * 返回值：如果数据绑定到视图返回真，否则返回假
-         */
-        @Override
-        public boolean setViewValue(View view, Object data,String textRepresentation) {
-            if((view instanceof ImageView)&(data instanceof Bitmap))
-            {
-                ImageView iv = (ImageView)view;
-                Bitmap bmp = (Bitmap)data;
-                iv.setImageBitmap(bmp);
-                return true;
-            }
-            return false;
+            final ItemsImagesAdapter adapter = new ItemsImagesAdapter(HeroItemsFragment.this, cItembuilds);
+            final SimpleGridView gridview = (SimpleGridView)cView.findViewById(itemsGridResId);
+            gridview.setAdapter(adapter);
+//      gridview.setOnItemClickListener(HeroItemsFragment.this);//设置监听
+            cView.findViewById(layoutResId).setVisibility(View.VISIBLE);
         }
     }
 }
