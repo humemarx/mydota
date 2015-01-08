@@ -1,6 +1,7 @@
 package com.hume.mydota;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -24,7 +24,7 @@ import java.util.List;
  * 英雄列表
  * Created by tcp on 2014/12/29.
  */
-public class MainItemlist extends Activity {
+public class MainItemlist extends Activity implements AdapterView.OnItemClickListener{
 
     private DataManager dataManager = new DataManager();
     private static List<ItemsItem> mItemList = new ArrayList<ItemsItem>();
@@ -61,13 +61,21 @@ public class MainItemlist extends Activity {
         herogv.setAdapter(simpleadpter);/*设置适配器*/
 
         /*设置监听*/
-        herogv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainItemlist.this,"Dota英雄",Toast.LENGTH_LONG);
-            }
-        });
+        herogv.setOnItemClickListener(this);
+    }
 
+    /**
+     * 点击网格动作
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+        Intent intent = new Intent(MainItemlist.this,ItemsDetailActivity.class);//跳转
+        intent.putExtra("ItemsItem",mItemList.get(position).keyName);//传递数据
+        startActivity(intent);//启动新的活动
     }
 
     private Bitmap getImageFromAssetsFile(String fileName)
