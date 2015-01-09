@@ -49,9 +49,7 @@ public class MainHerolist extends Activity implements AdapterView.OnItemClickLis
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(MainHerolist.this,HeroDetailActivity.class);//跳转
-        ArrayList<HeroItem> bundlelist = new ArrayList<HeroItem>();
-        bundlelist.add(mHeroList.get(position));
-        intent.putExtra("heroitem",bundlelist);//传递数据
+        intent.putExtra("heroitem",mHeroList.get(position).keyName);//传递数据
         startActivity(intent);//启动新的活动
     }
 }

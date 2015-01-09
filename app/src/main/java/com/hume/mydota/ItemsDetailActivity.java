@@ -1,13 +1,15 @@
 package com.hume.mydota;
 
-import android.app.ActivityGroup;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.hume.mydota.view.SimpleGridView;
@@ -20,7 +22,7 @@ import java.io.InputStream;
 /**物品详细
  * Created by tcp on 2015/1/8.
  */
-public class ItemsDetailActivity extends ActivityGroup {
+public class ItemsDetailActivity extends FragmentActivity implements SimpleGridView.OnItemClickListener{
     private ImageView item_icon;
     private TextView item_dname_l,item_dname,item_cost,item_mc,item_cd,item_attrib,item_desc,item_notes,item_lore;
     private String item_keyname;
@@ -28,7 +30,6 @@ public class ItemsDetailActivity extends ActivityGroup {
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_itemsdetail);
-
         /*数据初始化*/
         item_keyname = this.getIntent().getStringExtra("ItemsItem");//获取物品数据名称
         try {
@@ -86,7 +87,7 @@ public class ItemsDetailActivity extends ActivityGroup {
             final ItemsImagesAdapter adapter = new ItemsImagesAdapter(ItemsDetailActivity.this, itemslist.components_i);
             final SimpleGridView grid = (SimpleGridView) findViewById(R.id.grid_items_components);
             grid.setAdapter(adapter);
-            //grid.setOnItemClickListener(this);
+            grid.setOnItemClickListener(this);
             findViewById(R.id.llayout_items_components).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.llayout_items_components).setVisibility(View.GONE);
@@ -97,7 +98,7 @@ public class ItemsDetailActivity extends ActivityGroup {
             final ItemsImagesAdapter adapter = new ItemsImagesAdapter(ItemsDetailActivity.this, itemslist.tocomponents_i);
             final SimpleGridView grid = (SimpleGridView) findViewById(R.id.grid_items_tocomponents);
             grid.setAdapter(adapter);
-//        grid.setOnItemClickListener(HeroItemsFragment.this);//设置监听
+            grid.setOnItemClickListener(this);//设置监听
             findViewById(R.id.llayout_items_tocomponents).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.llayout_items_tocomponents).setVisibility(View.GONE);
@@ -108,7 +109,7 @@ public class ItemsDetailActivity extends ActivityGroup {
             final HeroImagesAdapter adapter = new HeroImagesAdapter(ItemsDetailActivity.this, itemslist.toheros_i);
             final SimpleGridView grid = (SimpleGridView) findViewById(R.id.grid_items_toheros);
             grid.setAdapter(adapter);
-//        grid.setOnItemClickListener(HeroItemsFragment.this);//设置监听
+            grid.setOnItemClickListener(this);//设置监听
             findViewById(R.id.llayout_items_toheros).setVisibility(View.VISIBLE);
         } else {
             findViewById(R.id.llayout_items_toheros).setVisibility(View.GONE);
@@ -132,5 +133,31 @@ public class ItemsDetailActivity extends ActivityGroup {
             e.printStackTrace();
         }
         return image;
+    }
+
+    /**
+     *
+     * @param parent
+     *            The AdapterView where the click happened.
+     * @param view
+     *            The view within the AdapterView that was clicked (this
+     *            will be a view provided by the adapter)
+     * @param position
+     *            The position of the view in the adapter.
+     * @param id
+     */
+    @Override
+    public void onItemClick(ListAdapter parent, View view, int position, long id) {
+        Intent intent = null;
+        if(parent instanceof ItemsImagesAdapter){
+            final ItemsItem cItem = (ItemsItem)parent.getItem(position);
+            intent = new Intent(this,ItemsDetailActivity.class);//跳转物品界面
+            intent.putExtra("ItemsItem",cItem.keyName);//传递数据
+        }else if (parent instanceof HeroImagesAdapter){
+            final HeroItem cItem = (HeroItem)parent.getItem(position);
+            intent = new Intent(this,HeroDetailActivity.class);//跳转英雄界面
+            intent.putExtra("heroitem",cItem.keyName);//传递数据
+        }
+        startActivity(intent);//启动新的活动
     }
 }

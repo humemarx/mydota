@@ -23,23 +23,23 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by tcp on 2014/12/30.
  */
 public class HeroSkillFragment extends FragmentActivity {
+    private String hero_keyname;
+    private HeroDetailItem herodata = null;
+    private HeroItem herolist = null;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_heroskill);
-        ArrayList<HeroItem> bundlelist = (ArrayList<HeroItem>)this.getIntent().getSerializableExtra("heroitem");//获取数据
-        HeroItem herolist = bundlelist.get(0);//获取英雄数据
-
-        HeroDetailItem cItem = null;
+        hero_keyname = this.getIntent().getStringExtra("heroitem");
         try {
-            cItem = DataManager.getHeroDetailItem(HeroSkillFragment.this,herolist.keyName);//获取详细信息
+            herodata = DataManager.getHeroDetailItem(this,hero_keyname);//获取详细信息
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -86,8 +86,8 @@ public class HeroSkillFragment extends FragmentActivity {
         text_hero_hp_faction_atk.setText(hero_atk);
 
         // 绑定视图——技能
-        if (cItem.abilities != null && cItem.abilities.size() > 0) {
-            final HeroAbilitiesAdapter adapter = new HeroAbilitiesAdapter(HeroSkillFragment.this, cItem.abilities);
+        if (herodata.abilities != null && herodata.abilities.size() > 0) {
+            final HeroAbilitiesAdapter adapter = new HeroAbilitiesAdapter(HeroSkillFragment.this, herodata.abilities);
             final SimpleListView list = Utils.findById(HeroSkillFragment.this, R.id.list_hero_abilities);
             list.setAdapter(adapter);
             // list.setOnItemClickListener(this);
@@ -97,8 +97,8 @@ public class HeroSkillFragment extends FragmentActivity {
         }
 
         // 绑定视图——技能加点
-        if (cItem.skillup != null && cItem.skillup.size() > 0) {
-            final HeroSkillupAdapter adapter = new HeroSkillupAdapter(HeroSkillFragment.this, cItem.skillup);
+        if (herodata.skillup != null && herodata.skillup.size() > 0) {
+            final HeroSkillupAdapter adapter = new HeroSkillupAdapter(HeroSkillFragment.this, herodata.skillup);
             final SimpleListView list = Utils.findById(HeroSkillFragment.this, R.id.list_hero_skillup);
             list.setAdapter(adapter);
             // list.setOnItemClickListener(this);

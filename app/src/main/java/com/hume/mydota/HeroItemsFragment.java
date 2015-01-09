@@ -1,5 +1,6 @@
 package com.hume.mydota;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.hume.mydota.view.SimpleGridView;
@@ -20,18 +22,18 @@ import java.util.ArrayList;
 /**出装推荐界面
  * Created by tcp on 2014/12/30.
  */
-public class HeroItemsFragment extends FragmentActivity{
+public class HeroItemsFragment extends FragmentActivity implements SimpleGridView.OnItemClickListener {
+    private String hero_keyname;
+    private HeroDetailItem herodata = null;
+    private HeroItem herolist = null;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_heroitems);
-
-        ArrayList<HeroItem> bundlelist = (ArrayList<HeroItem>)this.getIntent().getSerializableExtra("heroitem");//获取数据
-        HeroItem herolist = bundlelist.get(0);//获取英雄数据
-
-        HeroDetailItem herodata = null;
+        hero_keyname = this.getIntent().getStringExtra("heroitem");
         try {
-            herodata = DataManager.getHeroDetailItem(HeroItemsFragment.this,herolist.keyName);//获取详细信息
+            herodata = DataManager.getHeroDetailItem(this,hero_keyname);//获取详细信息
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -134,8 +136,23 @@ public class HeroItemsFragment extends FragmentActivity{
             final ItemsImagesAdapter adapter = new ItemsImagesAdapter(HeroItemsFragment.this, cItembuilds);
             final SimpleGridView gridview = (SimpleGridView)cView.findViewById(itemsGridResId);
             gridview.setAdapter(adapter);
-//      gridview.setOnItemClickListener(HeroItemsFragment.this);//设置监听
+            gridview.setOnItemClickListener(this);//设置监听
             cView.findViewById(layoutResId).setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 点击网格动作
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemClick(ListAdapter parent, View view, int position, long id) {
+        final ItemsItem cItem = (ItemsItem)parent.getItem(position);
+        Intent intent = new Intent(HeroItemsFragment.this,ItemsDetailActivity.class);//跳转
+        intent.putExtra("ItemsItem",cItem.keyName);//传递数据
+        startActivity(intent);//启动新的活动
     }
 }
