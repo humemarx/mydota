@@ -1,12 +1,15 @@
 package com.hume.mydota;
 
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.hume.mydota.view.SimpleGridView;
@@ -20,21 +23,19 @@ import java.util.ArrayList;
 /**出装推荐界面
  * Created by tcp on 2014/12/30.
  */
-public class HeroItemsFragment extends FragmentActivity{
+public class HeroItemsFragment extends FragmentActivity implements SimpleGridView.OnItemClickListener {
+    private String hero_keyname;
+    private HeroDetailItem herodata = null;
+    private HeroItem herolist = null;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_heroitems);
-
-        ArrayList<HeroItem> bundlelist = (ArrayList<HeroItem>)this.getIntent().getSerializableExtra("heroitem");//获取数据
-        HeroItem herolist = bundlelist.get(0);//获取英雄数据
-
-        HeroDetailItem herodata = null;
+        hero_keyname = this.getIntent().getStringExtra("heroitem");
         try {
-            herodata = DataManager.getHeroDetailItem(HeroItemsFragment.this,herolist.keyName);//获取详细信息
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+            herodata = DataManager.getHeroDetailItem(this,hero_keyname);//获取详细信息
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         View view = findViewById(R.id.myhero_detail_view);
@@ -58,16 +59,19 @@ public class HeroItemsFragment extends FragmentActivity{
             hero_role += "/"+herolist.roles_l[i];
         }
 
-        if(herolist.hp == "intelligence"){
-            hero_hp = "智力";
-        }
-        else if(herolist.hp == "agility"){
-            hero_hp = "敏捷";
-        }else{
-            hero_hp = "力量";
+        switch (herolist.hp) {
+            case "intelligence":
+                hero_hp = "智力";
+                break;
+            case "agility":
+                hero_hp = "敏捷";
+                break;
+            default:
+                hero_hp = "力量";
+                break;
         }
 
-        if(herolist.faction == "radiant"){
+        if(herolist.faction.equals("radiant")){
             hero_faction = "天辉";
         }else {
             hero_faction = "夜魇";
@@ -89,7 +93,9 @@ public class HeroItemsFragment extends FragmentActivity{
     /**
      * 读取图像文件
      * @param fileName
+     *              文件名
      * @return
+     *              return bitmap
      */
     private Bitmap getImageFromAssetsFile(String fileName)
     {
@@ -109,24 +115,26 @@ public class HeroItemsFragment extends FragmentActivity{
     /**
      * 绑定视图——推荐出装
      * @param cView
+     * cview
      * @param cItem
+     * cItem
      * @param cItembuildsKey
+     * cItembuildsKey
      * @param layoutResId
+     * layoutResId
      * @param itemsGridResId
+     * itemsGridResId
      */
     private void bindItembuildsItems(View cView, HeroDetailItem cItem,String cItembuildsKey,int layoutResId, int itemsGridResId) {
         if(cItem.itembuilds != null && cItem.itembuilds.size() > 0)
         {
-            DataManager dataManager = new DataManager();
             final ArrayList<ItemsItem> cItembuilds = new ArrayList<>();
             final String[] cItemsb = cItem.itembuilds.get(cItembuildsKey);
-            for(int i=0; i<cItemsb.length; ++i){
+            for (String aCItemsb : cItemsb) {
                 ItemsItem itemsItem = null;
                 try {
-                    itemsItem = dataManager.getItemsItem(HeroItemsFragment.this,cItemsb[i]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
+                    itemsItem = DataManager.getItemsItem(HeroItemsFragment.this, aCItemsb);
+                } catch (IOException | JSONException e) {
                     e.printStackTrace();
                 }
                 cItembuilds.add(itemsItem);
@@ -134,8 +142,30 @@ public class HeroItemsFragment extends FragmentActivity{
             final ItemsImagesAdapter adapter = new ItemsImagesAdapter(HeroItemsFragment.this, cItembuilds);
             final SimpleGridView gridview = (SimpleGridView)cView.findViewById(itemsGridResId);
             gridview.setAdapter(adapter);
-//      gridview.setOnItemClickListener(HeroItemsFragment.this);//设置监听
+            gridview.setOnItemClickListener(this);//设置监听
             cView.findViewById(layoutResId).setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * 点击网格动作
+     * @param parent
+     * parent
+     * @param view
+     * view
+     * @param position
+     * position
+     * @param id
+     * id
+     */
+    @Override
+    public void onItemClick(ListAdapter parent, View view, int position, long id) {
+        final ItemsItem cItem = (ItemsItem)parent.getItem(position);
+        Intent intent = new Intent(HeroItemsFragment.this,ItemsDetailActivity.class);//跳转
+        intent.putExtra(ItemsDetailActivity.KEY_ITEMS_DETAIL_KEY_NAME,cItem.keyName);//传递数据
+        if (!TextUtils.isEmpty(cItem.parent_keyName)) {
+            intent.putExtra(ItemsDetailActivity.KEY_ITEMS_DETAIL_PARENT_KEY_NAME,cItem.parent_keyName);//合成名称
+        }
+        startActivity(intent);//启动新的活动
     }
 }

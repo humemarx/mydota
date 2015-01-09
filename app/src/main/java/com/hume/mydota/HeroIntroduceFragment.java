@@ -22,24 +22,23 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 
 /**基本信息界面
  * Created by tcp on 2014/12/29.
  */
 public class HeroIntroduceFragment extends FragmentActivity {
+    private String hero_keyname;
+    private HeroDetailItem herodata = null;
+    private HeroItem herolist = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_herodetail);
-
-        ArrayList<HeroItem> bundlelist = (ArrayList<HeroItem>)this.getIntent().getSerializableExtra("heroitem");//获取数据
-        HeroItem herolist = bundlelist.get(0);//获取英雄数据
-
-        HeroDetailItem herodata = null;
+        hero_keyname = this.getIntent().getStringExtra("heroitem");//获取英雄数据名称
         try {
-            herodata = DataManager.getHeroDetailItem(HeroIntroduceFragment.this,herolist.keyName);//获取详细信息
+            herodata = DataManager.getHeroDetailItem(HeroIntroduceFragment.this,hero_keyname);//获取详细信息
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -182,12 +181,10 @@ public class HeroIntroduceFragment extends FragmentActivity {
         if (cItem == null||cItem.detailstats1 == null||cItem.detailstats1.size()!=5||cItem.detailstats2==null||cItem.detailstats2.size()!=3){
             return;
         }
-
         final TableLayout table = (TableLayout) cView.findViewById(R.id.table_hero_detailstats);
         if (table == null) {
             return;
         }
-
         final Context context = cView.getContext();
         final TableRow.LayoutParams rowLayout = new TableRow.LayoutParams();
         rowLayout.weight = 1f;

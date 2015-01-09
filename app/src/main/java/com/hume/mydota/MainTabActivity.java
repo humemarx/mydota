@@ -36,17 +36,9 @@ public class MainTabActivity extends ActivityGroup {
         inflater.inflate(R.layout.activity_about,tabhost.getTabContentView());
         TabWidget tabWidget = tabhost.getTabWidget();
 
-        tabhost.addTab(tabhost.newTabSpec("tab1")
-                .setIndicator(getString(R.string.main_actionBar_tab_hero))
-                .setContent(new Intent(MainTabActivity.this,MainHerolist.class)));
-
-        tabhost.addTab(tabhost.newTabSpec("tab2")
-                .setIndicator(getString(R.string.main_actionBar_tab_item))
-                .setContent(new Intent(MainTabActivity.this,MainItemlist.class)));
-
-        tabhost.addTab(tabhost.newTabSpec("tab3")
-                .setIndicator(getString(R.string.main_actionBar_tab_skill))
-                .setContent(R.id.webv_about_desc));
+        tabhost.addTab(tabhost.newTabSpec("tab1").setIndicator(getString(R.string.main_actionBar_tab_hero)).setContent(new Intent(MainTabActivity.this,MainHerolist.class)));
+        tabhost.addTab(tabhost.newTabSpec("tab2").setIndicator(getString(R.string.main_actionBar_tab_item)).setContent(new Intent(MainTabActivity.this,MainItemlist.class)));
+        tabhost.addTab(tabhost.newTabSpec("tab3").setIndicator(getString(R.string.main_actionBar_tab_skill)).setContent(R.id.webv_about_desc));
 
         tabhost.setOpenAnimation(true);
         gestureDetector = new GestureDetector(new MyGestureDetector());
