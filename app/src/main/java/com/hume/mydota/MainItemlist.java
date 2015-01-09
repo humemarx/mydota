@@ -3,6 +3,7 @@ package com.hume.mydota;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -18,18 +19,14 @@ import java.util.List;
  * Created by tcp on 2014/12/29.
  */
 public class MainItemlist extends Activity implements AdapterView.OnItemClickListener{
-
-    private DataManager dataManager = new DataManager();
-    private static List<ItemsItem> mItemList = new ArrayList<ItemsItem>();
+    private List<ItemsItem> mItemList = new ArrayList<>();
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_itemsdata);
         try {
-            mItemList = dataManager.getItemsList(MainItemlist.this);/*获取全部物品信息*/
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            mItemList = DataManager.getItemsList(MainItemlist.this);/*获取全部物品信息*/
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
         final ItemsImagesAdapter adapter = new ItemsImagesAdapter(this, mItemList);
@@ -48,11 +45,15 @@ public class MainItemlist extends Activity implements AdapterView.OnItemClickLis
      * @param position
      *            The position of the view in the adapter.
      * @param id
+     *            The id of the view in the adapter
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(MainItemlist.this,ItemsDetailActivity.class);//跳转
-        intent.putExtra("ItemsItem",mItemList.get(position).keyName);//传递数据
+        intent.putExtra(ItemsDetailActivity.KEY_ITEMS_DETAIL_KEY_NAME,mItemList.get(position).keyName);//传递数据,该名称
+        if (!TextUtils.isEmpty(mItemList.get(position).parent_keyName)) {
+            intent.putExtra(ItemsDetailActivity.KEY_ITEMS_DETAIL_PARENT_KEY_NAME,mItemList.get(position).parent_keyName);//合成名称
+        }
         startActivity(intent);//启动新的活动
     }
 }
