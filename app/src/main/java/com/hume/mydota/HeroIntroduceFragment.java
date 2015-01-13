@@ -1,21 +1,14 @@
 package com.hume.mydota;
 
-import android.content.Context;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -31,6 +24,27 @@ public class HeroIntroduceFragment extends FragmentActivity {
     private String hero_keyname;
     private HeroDetailItem herodata = null;
     private HeroItem herolist = null;
+
+    private int level_hero = 1;//初始等级
+    private int init_hp,init_mp;//初始血量和魔法
+    private int init_int,init_agi,init_str;//初始属性
+    private int init_dmg_max,init_dmg_min,init_ms;
+    private double init_armor;
+    private double lv_int,lv_agi,lv_str;//属性成长
+    private double lv_dmg,lv_armor,lv_mp,lv_hp;
+
+    private int hero_int,hero_agi,hero_str;//英雄属性
+    private int hero_armor,hero_dmg_max,hero_dmg_min;//护甲，攻击，移速
+    private int hero_hp,hero_mp;
+    private int hpIndex;
+    private TextView text_hero_hp,text_hero_mp,text_level,text_hero_int,text_hero_agi,text_hero_str;
+    private TextView text_hero_name_l,text_hero_name,text_hero_roles,text_hero_hp_faction_atk;
+    private TextView text_hero_bio,text_hero_shiye,text_hero_dandao,text_hero_dansudu;
+    private TextView text_hero_ms,text_hero_dmg,text_hero_armor,text_lv_fu,text_lv_jia;
+    private ImageView image_prime,image_hero;
+
+    private String hero_nickname,hero_role,hero_att,hero_faction;
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,21 +58,10 @@ public class HeroIntroduceFragment extends FragmentActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        View view = findViewById(R.id.myhero_detail_view);
-
-        ImageView image_hero = (ImageView)findViewById(R.id.image_hero);//英雄图像
-        TextView text_hero_name_l = (TextView)findViewById(R.id.text_hero_name_l);//中文名称
-        TextView text_hero_name = (TextView)findViewById(R.id.text_hero_name);//英文名称
-        TextView text_hero_roles = (TextView)findViewById(R.id.text_hero_roles);//角色定位
-        TextView text_hero_hp_faction_atk = (TextView)findViewById(R.id.text_hero_hp_faction_atk);//英雄类型
-        TextView text_hero_bio = (TextView)findViewById(R.id.text_hero_bio);//英雄介绍
-
-        String imagevalue = Utils.getHeroImageUri(herolist.keyName);
-        Bitmap bitmap = getImageFromAssetsFile(imagevalue);
-        String hero_nickname = herolist.nickname_l[0];
-        String hero_role = herolist.roles_l[0];
-        String hero_hp;
-        String hero_faction;
+        init_dota_info();//初始化控件
+        bitmap = getImageFromAssetsFile(Utils.getHeroImageUri(herolist.keyName));
+        hero_nickname = herolist.nickname_l[0];
+        hero_role = herolist.roles_l[0];
         for(int i=1; i<herolist.nickname_l.length; ++i){
             hero_nickname += "/"+herolist.nickname_l[i];
         }
@@ -66,33 +69,176 @@ public class HeroIntroduceFragment extends FragmentActivity {
             hero_role += "/"+herolist.roles_l[i];
         }
 
-        if(herolist.hp == "intelligence"){
-            hero_hp = "智力";
+        if(herolist.hp.equals("intelligence")){
+            hero_att = "智力";
+            hpIndex = 0;
+            image_prime = (ImageView)findViewById(R.id.image_hero_int_icon_primary);
         }
-        else if(herolist.hp == "agility"){
-            hero_hp = "敏捷";
+        else if(herolist.hp.equals("agility")){
+            hero_att = "敏捷";
+            hpIndex = 1;
+            image_prime = (ImageView)findViewById(R.id.image_hero_agi_icon_primary);
         }else{
-            hero_hp = "力量";
+            hero_att = "力量";
+            hpIndex = 2;
+            image_prime = (ImageView)findViewById(R.id.image_hero_str_icon_primary);
         }
-
-        if(herolist.faction == "radiant"){
+        if(herolist.faction.equals("radiant")){
             hero_faction = "天辉";
         }else {
             hero_faction = "夜魇";
         }
-        String hero_atk = herolist.atk_l+"/"+hero_faction+"/"+hero_hp;
+        dota_lv_init(herodata);//数据初始化
+        init_dota_set();//初始设置
+        /*设置等级减少的监听*/
+        text_lv_fu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                level_hero -= 1;
+                if(level_hero==0){
+                    level_hero = 1;
+                }
+                dota_lv_up(level_hero,herodata);
+                dota_lv_stats();
+            }
+        });
+        /*设置等级增加的监听*/
+        text_lv_jia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                level_hero += 1;
+                if(level_hero==26){
+                    level_hero = 25;
+                }
+                dota_lv_up(level_hero,herodata);
+                dota_lv_stats();
+            }
+        });
+        dota_lv_up(level_hero, herodata);//获取属性值
+        dota_lv_stats();//属性设置
+    }
+
+    /**
+     * 初始化界面控件
+     */
+    private void init_dota_info(){
+        image_hero = (ImageView)findViewById(R.id.image_hero);//英雄图像
+        text_hero_name_l = (TextView)findViewById(R.id.text_hero_name_l);//中文名称
+        text_hero_name = (TextView)findViewById(R.id.text_hero_name);//英文名称
+        text_hero_roles = (TextView)findViewById(R.id.text_hero_roles);//角色定位
+        text_hero_hp_faction_atk = (TextView)findViewById(R.id.text_hero_hp_faction_atk);//英雄类型
+        text_hero_bio = (TextView)findViewById(R.id.text_hero_bio);//英雄介绍
+        text_hero_shiye = (TextView)findViewById(R.id.text_hero_shiye);//视野范围
+        text_hero_dandao = (TextView)findViewById(R.id.text_hero_dandao);//攻击距离
+        text_hero_dansudu = (TextView)findViewById(R.id.text_hero_dansudu);//弹道速度
+        text_hero_ms = (TextView)findViewById(R.id.text_hero_ms_value);//移速
+        text_lv_jia = (TextView)findViewById(R.id.lv_jia);//等级增加
+        text_lv_fu = (TextView)findViewById(R.id.lv_fu);//等级减少
+
+        text_hero_hp = (TextView)findViewById(R.id.hp_text);//英雄血量
+        text_hero_mp = (TextView)findViewById(R.id.mp_text);//英雄蓝量
+        text_level = (TextView)findViewById(R.id.text_level);//英雄等级
+
+        text_hero_int = (TextView)findViewById(R.id.text_hero_int_value);//智力
+        text_hero_agi = (TextView)findViewById(R.id.text_hero_agi_value);//敏捷
+        text_hero_str = (TextView)findViewById(R.id.text_hero_str_value);//力量
+        text_hero_dmg = (TextView)findViewById(R.id.text_hero_dmg_value);//攻击
+        text_hero_armor = (TextView)findViewById(R.id.text_hero_armor_value);//护甲
+    }
+
+    /**
+     * 固定位置的文本设置
+     */
+    private void init_dota_set(){
         image_hero.setImageBitmap(bitmap);
         text_hero_name_l.setText(herolist.name_l);
         text_hero_name.setText(hero_nickname);
         text_hero_roles.setText(hero_role);
-        text_hero_hp_faction_atk.setText(hero_atk);
+        text_hero_hp_faction_atk.setText(herolist.atk_l+"/"+hero_faction+"/"+hero_att);
         text_hero_bio.setText("       "+herodata.bio_l);
-        // 绑定英雄属性信息
-        bindStatsView(view, herodata);
-        // 绑定英雄详细属性信息
-        bindDetailstatsView(view, herodata);
+        text_hero_shiye.setText(herodata.detailstats2.get(0)[1]);
+        text_hero_dandao.setText(herodata.detailstats2.get(1)[1]);
+        text_hero_dansudu.setText(herodata.detailstats2.get(2)[1]);
+        image_prime.setVisibility(View.VISIBLE);
+        text_hero_ms.setText(herodata.stats1.get(4)[2]);
+    }
+    /**
+     * 模拟英雄等级
+     * @param level_hero
+     * @param cItem
+     */
+    private void dota_lv_up(int level_hero, HeroDetailItem cItem) {
+        hero_int = (int)(init_int+(level_hero-1)*lv_int);
+        hero_agi = (int)(init_agi+(level_hero-1)*lv_agi);
+        hero_str = (int)(init_str+(level_hero-1)*lv_str);
+        hero_dmg_max = (int)(init_dmg_max+(level_hero-1)*lv_agi*lv_dmg);
+        hero_dmg_min = (int)(init_dmg_min+(level_hero-1)*lv_agi*lv_dmg);
+        hero_armor = (int)(init_armor+(level_hero-1)*lv_agi*lv_armor);
+        hero_hp = (int)(init_hp+(level_hero-1)*lv_str*lv_hp);
+        hero_mp = (int)(init_mp+(level_hero-1)*lv_int*lv_mp);
     }
 
+    /**
+     * 初始化英雄属性
+     * @param cItem
+     */
+    private void dota_lv_init(HeroDetailItem cItem) {
+        /*智力*/
+        String[] int_string = cItem.stats1.get(0)[2].split("[+]");
+        init_int = Integer.parseInt(int_string[0].trim());
+        lv_int = Double.parseDouble(int_string[1].trim());
+        /*敏捷*/
+        String[] agi_string = cItem.stats1.get(1)[2].split("[+]");
+        init_agi = Integer.parseInt(agi_string[0].trim());
+        lv_agi = Double.parseDouble(agi_string[1].trim());
+         /*力量*/
+        String[] str_string = cItem.stats1.get(2)[2].split("[+]");
+        init_str = Integer.parseInt(str_string[0].trim());
+        lv_str = Double.parseDouble(str_string[1].trim());
+        /*攻击*/
+        String[] dmg_string = cItem.stats1.get(3)[2].split("[-]");
+        init_dmg_min = Integer.parseInt(dmg_string[0].trim());
+        init_dmg_max = Integer.parseInt(dmg_string[1].trim());
+        lv_dmg = 1;
+        /*速度*/
+        init_ms = Integer.parseInt(cItem.stats1.get(4)[2]);
+        /*护甲*/
+        init_armor = Double.parseDouble(cItem.stats1.get(5)[2]);
+        lv_armor = 0.14;
+        /*血量*/
+        init_hp = Integer.parseInt(cItem.detailstats1.get(1)[3]);
+        lv_hp = 19;
+        Log.v("Tag_hp", String.valueOf(init_hp));
+        /*蓝量*/
+        init_mp = Integer.parseInt(cItem.detailstats1.get(2)[3]);
+        Log.v("Tag_mp", String.valueOf(init_mp));
+        lv_mp = 13;
+    }
+
+    /*设置属性数值*/
+    private void dota_lv_stats(){
+        text_hero_hp.setText("HP:" + String.valueOf(hero_hp) + "/" + String.valueOf(hero_hp));
+        text_hero_mp.setText("MP:"+String.valueOf(hero_mp)+"/"+String.valueOf(hero_mp));
+        text_level.setText(String.valueOf(level_hero));
+        text_hero_int.setText(String.valueOf(hero_int)+" + "+String.valueOf(lv_int));
+        text_hero_agi.setText(String.valueOf(hero_agi)+" + "+String.valueOf(lv_agi));
+        text_hero_str.setText(String.valueOf(hero_str)+" + "+String.valueOf(lv_str));
+        text_hero_dmg.setText(String.valueOf(hero_dmg_min)+" - "+String.valueOf(hero_dmg_max));
+        text_hero_armor.setText(String.valueOf(hero_armor));
+        switch (hpIndex){
+            case 0:
+                text_hero_int.setTextColor(Color.RED);
+                break;
+            case 1:
+                text_hero_agi.setTextColor(Color.RED);
+                break;
+            case 2:
+                text_hero_str.setTextColor(Color.RED);
+                break;
+            default:
+                break;
+        }
+    }
 
     /**
      * 读取图像文件
@@ -112,128 +258,5 @@ public class HeroIntroduceFragment extends FragmentActivity {
             e.printStackTrace();
         }
         return image;
-    }
-
-    /**
-     * 绑定视图-统计信息
-     *
-     * @param cView
-     * @param cItem
-     */
-    private void bindStatsView(View cView, HeroDetailItem cItem) {
-        if (cItem == null || cItem.stats1 == null
-                || cItem.stats1.size() != 6) {
-            return;
-        }
-
-        final LinearLayout layoutStats1 = Utils.findById(cView, R.id.layout_hero_stats1);
-        final LinearLayout layoutStats2 = Utils.findById(cView, R.id.layout_hero_stats2);
-        if (layoutStats1 == null || layoutStats2 == null) {
-            return;
-        }
-
-        final Context context = cView.getContext();
-        final Resources res = context.getResources();
-        final String[] labels = res.getStringArray(R.array.array_hero_stats);
-        final int[] resIds = new int[] {
-                R.drawable.overviewicon_int, R.drawable.overviewicon_agi,
-                R.drawable.overviewicon_str, R.drawable.overviewicon_attack,
-                R.drawable.overviewicon_speed, R.drawable.overviewicon_defense
-        };
-
-        final LayoutInflater inflater = LayoutInflater.from(context);
-        final int hpIndex = (cItem.hp.equals("intelligence") ? 0: (cItem.hp.equals("agility") ? 1 : 2));
-        ViewGroup cParent = layoutStats1;
-        View view = null;
-        TextView text1 = null;
-        TextView text2 = null;
-        ImageView image = null;
-        for (int i = 0; i < cItem.stats1.size(); i++) {
-            cParent = (i <= 2 ? layoutStats1 : layoutStats2);
-            view = inflater.inflate(R.layout.fragment_herodetail_stats_list_item, cParent,false);
-
-            text1 = Utils.findById(view, R.id.text_hero_stats_label);
-            text1.setText(labels[i]);
-
-            image = Utils.findById(view, R.id.image_hero_stats_icon);
-            image.setImageResource(resIds[i]);
-
-            text2 = Utils.findById(view, R.id.text_hero_stats_value);
-            text2.setText(cItem.stats1.get(i)[2]);
-            if (hpIndex == i) {
-                image = Utils.findById(view, R.id.image_hero_stats_icon_primary);
-                image.setVisibility(View.VISIBLE);
-                text1.setTextColor(Color.RED);
-                text2.setTextColor(Color.RED);
-            }
-            cParent.addView(view);
-        }
-    }
-
-    /**
-     * 绑定视图-详细统计信息
-     *
-     * @param cView
-     * @param cItem
-     */
-    @SuppressWarnings("deprecation")
-    private void bindDetailstatsView(View cView, HeroDetailItem cItem) {
-        if (cItem == null||cItem.detailstats1 == null||cItem.detailstats1.size()!=5||cItem.detailstats2==null||cItem.detailstats2.size()!=3){
-            return;
-        }
-        final TableLayout table = (TableLayout) cView.findViewById(R.id.table_hero_detailstats);
-        if (table == null) {
-            return;
-        }
-        final Context context = cView.getContext();
-        final TableRow.LayoutParams rowLayout = new TableRow.LayoutParams();
-        rowLayout.weight = 1f;
-        final TableLayout.LayoutParams tableLayout = new TableLayout.LayoutParams();
-        final String[] detailstatsLabel = context.getResources().getStringArray(R.array.array_hero_detailstats);
-        final Drawable rowBg = context.getResources().getDrawable(R.drawable.hero_detailstats_table_bg);
-        int count = cItem.detailstats1.size();
-        int iCount = 0;
-        String[] iItem = null;
-        TableRow row = null;
-        TextView text = null;
-        // --detailstats1
-        for (int i = 0; i < count; i++) {
-            row = new TableRow(context);
-            iItem = cItem.detailstats1.get(i);
-            iCount = iItem.length;
-            for (int ii = 0; ii < iCount; ii++) {
-                text = new TextView(context);
-                text.setPadding(0, 3, 0, 3);
-                if (i <= 0) {
-                    text.setText(ii == 0 ? detailstatsLabel[i] : iItem[ii]);
-                } else { // INFO:源数据颠倒
-                    text.setText(ii == 0 ? detailstatsLabel[i] : iItem[iCount - ii]);
-                }
-                text.setTextColor(Color.WHITE);//设置字体颜色
-                row.addView(text, rowLayout);
-            }
-            if (i % 2 == 1) {
-                row.setBackgroundDrawable(rowBg);
-            }
-            table.addView(row, tableLayout);
-        }
-        // --detailstats2
-        count = cItem.detailstats2.size();
-        for (int i = 0; i < count; i++) {
-            row = new TableRow(context);
-            iItem = cItem.detailstats2.get(i);
-            iCount = iItem.length;
-            for (int ii = 0; ii < iCount; ii++) {
-                text = new TextView(context);
-                text.setPadding(0, 3, 0, 3);
-                text.setText(ii == 0 ? detailstatsLabel[i + 5] : iItem[ii]);
-                text.setTextColor(Color.WHITE);//设置字体颜色
-                row.addView(text, rowLayout);
-            }
-            if (i % 2 == 0) {
-                row.setBackgroundDrawable(rowBg);
-            }
-            table.addView(row, tableLayout);
-        }
     }
 }

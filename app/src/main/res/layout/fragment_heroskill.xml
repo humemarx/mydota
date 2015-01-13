@@ -85,7 +85,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_abilities_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff" />
+                android:textColor="#ffff1a57"
+                android:textSize="@dimen/abc_text_size_large_material" />
 
             <com.hume.mydota.view.SimpleListView
                 android:id="@+id/list_hero_abilities"
@@ -110,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_skillup_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff" />
+                android:textColor="#ffff1a57"
+                android:textSize="@dimen/abc_text_size_large_material" />
 
             <com.hume.mydota.view.SimpleListView
                 android:id="@+id/list_hero_skillup"

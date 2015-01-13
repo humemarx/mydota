@@ -85,7 +85,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_itembuilds_starting_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff" />
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:textColor="#ffff1a57" />
             <com.hume.mydota.view.SimpleGridView
                 android:id="@+id/grid_hero_itembuilds_starting"
                 android:layout_width="match_parent"
@@ -110,7 +111,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_itembuilds_early_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff"/>
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:textColor="#ffff1a57"/>
             <com.hume.mydota.view.SimpleGridView
                 android:id="@+id/grid_hero_itembuilds_early"
                 android:layout_width="match_parent"
@@ -135,7 +137,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_itembuilds_core_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff"/>
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:textColor="#ffff1a57"/>
             <com.hume.mydota.view.SimpleGridView
                 android:id="@+id/grid_hero_itembuilds_core"
                 android:layout_width="match_parent"
@@ -160,7 +163,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/text_hero_itembuilds_luxury_label"
                 android:textStyle="bold"
-                android:textColor="#ffffffff"/>
+                android:textSize="@dimen/abc_text_size_large_material"
+                android:textColor="#ffff1a57"/>
             <com.hume.mydota.view.SimpleGridView
                 android:id="@+id/grid_hero_itembuilds_luxury"
                 android:layout_width="match_parent"

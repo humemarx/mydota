@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:paddingBottom="@dimen/margins_text"
-    android:paddingTop="@dimen/margins_text" >
+    android:paddingTop="@dimen/margins_text"
+    android:background="#ff1a1a1a">
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -48,6 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:text="@string/text_hero_stats_demo_value"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:editable="true"
+        android:autoText="false" />
 
 </LinearLayout>

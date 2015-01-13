@@ -45,9 +45,15 @@
     <string name="text_hero_itembuilds_starting_label">出门装备:</string>
     <string name="text_hero_itembuilds_early_label">前期装备:</string>
     <string name="text_hero_itembuilds_core_label">核心装备:</string>
-    <string name="text_hero_itembuilds_luxury_label">可选装备:</string>
+    <string name="text_hero_itembuilds_luxury_label">后期神装:</string>
     <string name="text_hero_skillup_label">技能加点:</string>
     <string name="text_hero_stats_demo_label">智力</string>
+    <string name="text_hero_stats_int_label">智力</string>
+    <string name="text_hero_stats_agi_label">敏捷</string>
+    <string name="text_hero_stats_str_label">力量</string>
+    <string name="text_hero_stats_dmg_label">攻击</string>
+    <string name="text_hero_stats_ms_label">移速</string>
+    <string name="text_hero_stats_armor_label">护甲</string>
     <string name="text_hero_stats_demo_value">21 + 2.80</string>
     <string name="text_division_label">/</string>
     <string name="text_favorite_emptylist">暂无收藏…</string>

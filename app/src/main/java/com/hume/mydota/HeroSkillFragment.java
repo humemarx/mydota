@@ -193,7 +193,6 @@ public class HeroSkillFragment extends FragmentActivity {
 
             final AbilityItem item = (AbilityItem) getItem(position);
             Bitmap bitmap = getImageFromAssetsFile(Utils.getAbilitiesImageUri(item.keyName));
-//            ImageLoader.getInstance().displayImage(Utils.getAbilitiesImageUri(item.keyName),holder.image, mImageLoadOptions);
             holder.image.setImageBitmap(bitmap);
             holder.dname.setText(item.dname);
             Utils.bindHtmlTextView(holder.affects, item.affects);
