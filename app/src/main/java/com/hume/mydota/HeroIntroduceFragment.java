@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ public class HeroIntroduceFragment extends FragmentActivity {
     private int level_hero = 1;//初始等级
     private int init_hp,init_mp;//初始血量和魔法
     private int init_int,init_agi,init_str;//初始属性
-    private int init_dmg_max,init_dmg_min,init_ms;
+    private int init_dmg_max,init_dmg_min;
     private double init_armor;
     private double lv_int,lv_agi,lv_str;//属性成长
     private double lv_dmg,lv_armor,lv_mp,lv_hp;
@@ -53,9 +52,7 @@ public class HeroIntroduceFragment extends FragmentActivity {
         try {
             herodata = DataManager.getHeroDetailItem(HeroIntroduceFragment.this,hero_keyname);//获取详细信息
             herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         init_dota_info();//初始化控件
@@ -69,26 +66,29 @@ public class HeroIntroduceFragment extends FragmentActivity {
             hero_role += "/"+herolist.roles_l[i];
         }
 
-        if(herolist.hp.equals("intelligence")){
-            hero_att = "智力";
-            hpIndex = 0;
-            image_prime = (ImageView)findViewById(R.id.image_hero_int_icon_primary);
-        }
-        else if(herolist.hp.equals("agility")){
-            hero_att = "敏捷";
-            hpIndex = 1;
-            image_prime = (ImageView)findViewById(R.id.image_hero_agi_icon_primary);
-        }else{
-            hero_att = "力量";
-            hpIndex = 2;
-            image_prime = (ImageView)findViewById(R.id.image_hero_str_icon_primary);
+        switch (herolist.hp) {
+            case "intelligence":
+                hero_att = "智力";
+                hpIndex = 0;
+                image_prime = (ImageView) findViewById(R.id.image_hero_int_icon_primary);
+                break;
+            case "agility":
+                hero_att = "敏捷";
+                hpIndex = 1;
+                image_prime = (ImageView) findViewById(R.id.image_hero_agi_icon_primary);
+                break;
+            default:
+                hero_att = "力量";
+                hpIndex = 2;
+                image_prime = (ImageView) findViewById(R.id.image_hero_str_icon_primary);
+                break;
         }
         if(herolist.faction.equals("radiant")){
             hero_faction = "天辉";
         }else {
             hero_faction = "夜魇";
         }
-        dota_lv_init(herodata);//数据初始化
+        dota_lv_init();//数据初始化
         init_dota_set();//初始设置
         /*设置等级减少的监听*/
         text_lv_fu.setOnClickListener(new View.OnClickListener() {
@@ -98,7 +98,7 @@ public class HeroIntroduceFragment extends FragmentActivity {
                 if(level_hero==0){
                     level_hero = 1;
                 }
-                dota_lv_up(level_hero,herodata);
+                dota_lv_up(level_hero);
                 dota_lv_stats();
             }
         });
@@ -110,11 +110,11 @@ public class HeroIntroduceFragment extends FragmentActivity {
                 if(level_hero==26){
                     level_hero = 25;
                 }
-                dota_lv_up(level_hero,herodata);
+                dota_lv_up(level_hero);
                 dota_lv_stats();
             }
         });
-        dota_lv_up(level_hero, herodata);//获取属性值
+        dota_lv_up(level_hero);//获取属性值
         dota_lv_stats();//属性设置
     }
 
@@ -165,14 +165,14 @@ public class HeroIntroduceFragment extends FragmentActivity {
     /**
      * 模拟英雄等级
      * @param level_hero
-     * @param cItem
+     * level of hero
      */
-    private void dota_lv_up(int level_hero, HeroDetailItem cItem) {
+    private void dota_lv_up(int level_hero) {
         hero_int = (int)(init_int+(level_hero-1)*lv_int);
         hero_agi = (int)(init_agi+(level_hero-1)*lv_agi);
         hero_str = (int)(init_str+(level_hero-1)*lv_str);
-        hero_dmg_max = (int)(init_dmg_max+(level_hero-1)*lv_agi*lv_dmg);
-        hero_dmg_min = (int)(init_dmg_min+(level_hero-1)*lv_agi*lv_dmg);
+        hero_dmg_max = (int)(init_dmg_max+(level_hero-1)*lv_dmg);
+        hero_dmg_min = (int)(init_dmg_min+(level_hero-1)*lv_dmg);
         hero_armor = (int)(init_armor+(level_hero-1)*lv_agi*lv_armor);
         hero_hp = (int)(init_hp+(level_hero-1)*lv_str*lv_hp);
         hero_mp = (int)(init_mp+(level_hero-1)*lv_int*lv_mp);
@@ -180,39 +180,30 @@ public class HeroIntroduceFragment extends FragmentActivity {
 
     /**
      * 初始化英雄属性
-     * @param cItem
      */
-    private void dota_lv_init(HeroDetailItem cItem) {
+    private void dota_lv_init() {
         /*智力*/
-        String[] int_string = cItem.stats1.get(0)[2].split("[+]");
-        init_int = Integer.parseInt(int_string[0].trim());
-        lv_int = Double.parseDouble(int_string[1].trim());
+        init_int = (int)herolist.statsall.init_int;
+        lv_int = herolist.statsall.lv_int;
         /*敏捷*/
-        String[] agi_string = cItem.stats1.get(1)[2].split("[+]");
-        init_agi = Integer.parseInt(agi_string[0].trim());
-        lv_agi = Double.parseDouble(agi_string[1].trim());
+        init_agi = (int)herolist.statsall.init_agi;
+        lv_agi = herolist.statsall.lv_agi;
          /*力量*/
-        String[] str_string = cItem.stats1.get(2)[2].split("[+]");
-        init_str = Integer.parseInt(str_string[0].trim());
-        lv_str = Double.parseDouble(str_string[1].trim());
+        init_str = (int)herolist.statsall.init_str;
+        lv_str = herolist.statsall.lv_str;
         /*攻击*/
-        String[] dmg_string = cItem.stats1.get(3)[2].split("[-]");
-        init_dmg_min = Integer.parseInt(dmg_string[0].trim());
-        init_dmg_max = Integer.parseInt(dmg_string[1].trim());
-        lv_dmg = 1;
-        /*速度*/
-        init_ms = Integer.parseInt(cItem.stats1.get(4)[2]);
+        init_dmg_min = (int)herolist.statsall.init_min_dmg;
+        init_dmg_max = (int)herolist.statsall.init_max_dmg;
+        lv_dmg = herolist.statsall.lv_dmg;
         /*护甲*/
-        init_armor = Double.parseDouble(cItem.stats1.get(5)[2]);
-        lv_armor = 0.14;
+        init_armor = herolist.statsall.init_armor;
+        lv_armor = herolist.statsall.lv_armor;
         /*血量*/
-        init_hp = Integer.parseInt(cItem.detailstats1.get(1)[3]);
-        lv_hp = 19;
-        Log.v("Tag_hp", String.valueOf(init_hp));
+        init_hp = (int)herolist.statsall.init_hp;
+        lv_hp = herolist.statsall.lv_hp;
         /*蓝量*/
-        init_mp = Integer.parseInt(cItem.detailstats1.get(2)[3]);
-        Log.v("Tag_mp", String.valueOf(init_mp));
-        lv_mp = 13;
+        init_mp = (int)herolist.statsall.init_mp;
+        lv_mp = herolist.statsall.lv_mp;
     }
 
     /*设置属性数值*/
@@ -243,7 +234,9 @@ public class HeroIntroduceFragment extends FragmentActivity {
     /**
      * 读取图像文件
      * @param fileName
+     * filename
      * @return
+     * bitmap
      */
     private Bitmap getImageFromAssetsFile(String fileName)
     {
