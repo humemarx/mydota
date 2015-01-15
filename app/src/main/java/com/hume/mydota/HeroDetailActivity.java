@@ -63,6 +63,7 @@ public class HeroDetailActivity extends ActivityGroup {
         Intent intent01 = new Intent(HeroDetailActivity.this, HeroIntroduceFragment.class);//基本信息
         Intent intent02 = new Intent(HeroDetailActivity.this,HeroSkillFragment.class);//技能加点
         Intent intent03 = new Intent(HeroDetailActivity.this,HeroItemsFragment.class);//出装推荐
+        Intent intent05 = new Intent(HeroDetailActivity.this,HeroVideoActivity.class);//教学视频
 
         intent01.putExtra("heroitem",hero_keyname);//传递数据
         intent02.putExtra("heroitem",hero_keyname);
@@ -72,7 +73,7 @@ public class HeroDetailActivity extends ActivityGroup {
         tabhost.addTab(tabhost.newTabSpec("tab2").setIndicator("技能加点").setContent(intent02));
         tabhost.addTab(tabhost.newTabSpec("tab3").setIndicator("出装推荐").setContent(intent03));
         tabhost.addTab(tabhost.newTabSpec("tab4").setIndicator("使用技巧").setContent(R.id.view4));
-        tabhost.addTab(tabhost.newTabSpec("tab5").setIndicator("教学视频").setContent(R.id.view5));
+        tabhost.addTab(tabhost.newTabSpec("tab5").setIndicator("教学视频").setContent(intent05));
 
         tabhost.setOpenAnimation(true);//滑动动画显示
         gestureDetector = new GestureDetector(new MyGestureDetector());

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hume.mydota" >
-
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -33,6 +34,13 @@
             android:label="heroskillfragment"></activity>
         <activity android:name=".ItemsDetailActivity"
             android:label="itemsdetaillist"></activity>
+        <activity android:name=".HeroVideoActivity"
+            android:label="herovideo"
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape"
+            android:hardwareAccelerated="true"
+            android:configChanges="orientation|keyboardHidden|screenSize">
+        </activity>
 
         <!--<activity-->
             <!--android:name=".MainActivity"-->
