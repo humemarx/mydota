@@ -41,6 +41,8 @@
             android:hardwareAccelerated="true"
             android:configChanges="orientation|keyboardHidden|screenSize">
         </activity>
+        <activity android:name=".HeroVideoListActivity"
+            android:label="herovideolist"></activity>
 
         <!--<activity-->
             <!--android:name=".MainActivity"-->
@@ -71,5 +73,11 @@
                 <!--android:value=".MainActivity" />-->
         <!--</activity>-->
     </application>
-
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:anyDensity="true" >
+    </supports-screens>
 </manifest>

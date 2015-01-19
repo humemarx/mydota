@@ -63,7 +63,7 @@ public class HeroDetailActivity extends ActivityGroup {
         Intent intent01 = new Intent(HeroDetailActivity.this, HeroIntroduceFragment.class);//基本信息
         Intent intent02 = new Intent(HeroDetailActivity.this,HeroSkillFragment.class);//技能加点
         Intent intent03 = new Intent(HeroDetailActivity.this,HeroItemsFragment.class);//出装推荐
-        Intent intent05 = new Intent(HeroDetailActivity.this,HeroVideoActivity.class);//教学视频
+        Intent intent05 = new Intent(HeroDetailActivity.this,HeroVideoListActivity.class);//教学视频
 
         intent01.putExtra("heroitem",hero_keyname);//传递数据
         intent02.putExtra("heroitem",hero_keyname);

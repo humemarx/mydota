@@ -1,18 +1,26 @@
-<FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#ff1a1a1a">
-    <FrameLayout
-        android:id="@+id/fullscreen_custom_content"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        android:background="#ff1a1a1a" />
-        <WebView
-            android:id="@+id/dota_web"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:scrollbars="none"
-            android:background="#ff1a1a1a" />
-</FrameLayout>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#ff1a1a1a"
+    android:orientation="vertical"
+    android:descendantFocusability="blocksDescendants">
+    <WebView
+        android:id="@+id/dota_web"
+        android:layout_width="match_parent"
+        android:layout_height="158dp"
+        android:scrollbars="none"
+        android:background="#ff1a1a1a"
+        android:focusable="false"
+        android:clickable="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_video"
+        android:id="@+id/text_video"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#ffffffff"
+        android:textSize="@dimen/abc_text_size_large_material" />
+
+</LinearLayout>
 
