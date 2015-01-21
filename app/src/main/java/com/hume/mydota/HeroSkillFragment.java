@@ -6,15 +6,21 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.Html;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.hume.mydota.view.SimpleGridView;
 import com.hume.mydota.view.SimpleListView;
@@ -32,6 +38,7 @@ public class HeroSkillFragment extends FragmentActivity {
     private String hero_keyname;
     private HeroDetailItem herodata = null;
     private HeroItem herolist = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -145,13 +152,15 @@ public class HeroSkillFragment extends FragmentActivity {
             public TextView dmg;
             public TextView notes;
             public TextView lore;
+            public ImageView image_skill;
+            public TextView text_skill;
+            public VideoView video_skill;
         }
 
         private final LayoutInflater mInflater;
         private final List<AbilityItem> mAbilities;
         public HeroAbilitiesAdapter(Context context,List<AbilityItem> abilities) {
             super();
-
             mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mAbilities = abilities;
         }
@@ -169,7 +178,7 @@ public class HeroSkillFragment extends FragmentActivity {
             return position;
         }
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
             View view = convertView;
 
             final ViewHolder holder;
@@ -187,6 +196,10 @@ public class HeroSkillFragment extends FragmentActivity {
                 holder.lore = Utils.findById(view, R.id.text_abilities_lore);
                 holder.image = Utils.findById(view, R.id.image_abilities);
 
+                holder.image_skill = Utils.findById(view,R.id.image_skill_video);
+                holder.video_skill = Utils.findById(view,R.id.skill_video);
+                holder.text_skill = Utils.findById(view,R.id.text_skill_video);
+
                 view.setTag(holder);
             } else
                 holder = (ViewHolder) view.getTag();
@@ -202,7 +215,34 @@ public class HeroSkillFragment extends FragmentActivity {
             Utils.bindHtmlTextView(holder.desc, item.desc);
             Utils.bindHtmlTextView(holder.notes, item.notes);
             Utils.bindHtmlTextView(holder.lore, item.lore);
+            holder.image_skill.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final String skill_video = herolist.skill_video[position];
+                    Log.v("skill",skill_video);
+                    Log.v("skill",String.valueOf(position));
+                    if(skill_video.indexOf("http")!=-1){
+                        holder.video_skill.setMediaController(new MediaController(HeroSkillFragment.this));
+                        holder.video_skill.setVideoURI(Uri.parse(skill_video));
+                        holder.image_skill.setVisibility(View.GONE);//设置消失
+                        holder.video_skill.setVisibility(View.VISIBLE);//设置可见
+                        holder.video_skill.start();
+                        holder.video_skill.requestFocus();
+                    }else{
+                        Toast toast = Toast.makeText(getApplicationContext(), "暂无视频", Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                }
+            });
 
+            holder.text_skill.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.video_skill.setVisibility(View.GONE);
+                    holder.image_skill.setVisibility(View.VISIBLE);
+                }
+            });
             return view;
         }
     }

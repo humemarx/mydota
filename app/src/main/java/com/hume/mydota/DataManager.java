@@ -175,8 +175,7 @@ public final class DataManager {
      * @throws JSONException
      * @throws java.io.IOException
      */
-    public synchronized static List<HeroItem> getHeroList(Context cContext)
-            throws JSONException, IOException {
+    public synchronized static List<HeroItem> getHeroList(Context cContext)throws JSONException, IOException {
         tryLoadHeroData(cContext);
         return mHeroList;
     }
@@ -227,13 +226,10 @@ public final class DataManager {
      * @throws java.io.IOException
      * @throws JSONException
      */
-    public synchronized static HeroItem getHeroItem(
-            Context cContext, String keyName) throws IOException, JSONException {
+    public synchronized static HeroItem getHeroItem(Context cContext, String keyName) throws IOException, JSONException {
         tryLoadHeroData(cContext);
-
         if (TextUtils.isEmpty(keyName))
             return null;
-
         return mHeroMap.get(keyName);
     }
 
@@ -466,6 +462,8 @@ public final class DataManager {
         cItem.roles = toStringArray(cJsonObj.optJSONArray("roles"));
         cItem.roles_l = toStringArray(cJsonObj.optJSONArray("roles_l"));
 
+        cItem.skill_video = toStringArray(cJsonObj.optJSONArray("skill_video"));
+
         cItem.nickname_l = toStringArray(cJsonObj.optJSONArray("nickname_l"));
         extractHeroStatsItem(cJsonObj.optJSONObject("statsall"), cItem);
         return cItem;
@@ -652,8 +650,7 @@ public final class DataManager {
      * @throws java.io.IOException
      * @throws JSONException
      */
-    private static JSONObject loadJsonObjectFromAssets(Context cContext,
-            String fileName) throws IOException, JSONException {
+    private static JSONObject loadJsonObjectFromAssets(Context cContext, String fileName) throws IOException, JSONException {
         final InputStream in = cContext.getAssets().open(fileName);
         return new JSONObject(streamToString(in));
     }

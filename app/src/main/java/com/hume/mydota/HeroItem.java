@@ -33,6 +33,11 @@ public class HeroItem implements Serializable {
     public String[] roles_l;
 
     /**
+     * 教学视频链接
+     */
+    public String[] skill_video;
+
+    /**
      * 昵称/别称
      *
      * FROM:http://dota2.replays.net/
