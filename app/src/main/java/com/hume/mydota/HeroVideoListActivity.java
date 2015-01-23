@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,13 +19,19 @@ import java.util.List;
 public class HeroVideoListActivity extends Activity{
     private List<String> video_list = new ArrayList<>();
     private String vid = "XNjE4ODExNDg0";//视频id
+    private String hero_keyname;
+    private HeroItem herolist;
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dota_video_listview);
-
-        for(int i=0; i<10; ++i){
-            video_list.add(vid);
-//            Log.v("string",vid);
+        hero_keyname = this.getIntent().getStringExtra("heroitem");
+        try {
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+        }
+        for(int i=0; i<herolist.hero_video.length; i++){
+            video_list.add(herolist.hero_video[i]);
         }
         final VideoAdapter videoadapter = new VideoAdapter(HeroVideoListActivity.this,video_list);
         final ListView listview = (ListView)findViewById(R.id.video_listview);

@@ -50,10 +50,8 @@ public class HeroDetailActivity extends ActivityGroup {
         /*数据初始化*/
         hero_keyname = this.getIntent().getStringExtra("heroitem");//获取英雄数据名称
         try {
-            herolist = DataManager.getHeroItem(this,hero_keyname);//获取详细信息
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+            herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
         Bitmap bitmap = getImageFromAssetsFile(Utils.getHeroIconUri(hero_keyname));//获取头像
@@ -68,6 +66,7 @@ public class HeroDetailActivity extends ActivityGroup {
         intent01.putExtra("heroitem",hero_keyname);//传递数据
         intent02.putExtra("heroitem",hero_keyname);
         intent03.putExtra("heroitem",hero_keyname);
+        intent05.putExtra("heroitem",hero_keyname);
 
         tabhost.addTab(tabhost.newTabSpec("tab1").setIndicator("基本介绍").setContent(intent01));
         tabhost.addTab(tabhost.newTabSpec("tab2").setIndicator("技能加点").setContent(intent02));

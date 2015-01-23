@@ -48,10 +48,10 @@ public class HeroVideoActivity extends Activity {
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);// 排版适应屏幕
         settings.setLoadWithOverviewMode(true);
         wv.setBackgroundColor(Color.DKGRAY); // 设置背景色
+//        wv.loadDataWithBaseURL(null,vid,"text/html","UTF-8", null);//加载网页数据
         wv.loadDataWithBaseURL(null,setWebView(clientid,vid),"text/html","UTF-8", null);//加载网页数据
         wv.setWebChromeClient(new MyWebChromeClient());
         wv.setWebViewClient(new MyWebViewClient());
-//        Log.v("string", setWebView(clientid, vid));
     }
     /*JS代码处理*/
     class MyWebChromeClient extends WebChromeClient {

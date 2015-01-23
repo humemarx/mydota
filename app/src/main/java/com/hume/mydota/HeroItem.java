@@ -33,10 +33,14 @@ public class HeroItem implements Serializable {
     public String[] roles_l;
 
     /**
-     * 教学视频链接
+     * 技能演示视频
      */
     public String[] skill_video;
 
+    /**
+     * 英雄教学视频
+     */
+    public String[] hero_video;
     /**
      * 昵称/别称
      *

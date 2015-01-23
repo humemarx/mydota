@@ -15,7 +15,6 @@ public class MyFrameLayout extends FrameLayout {
     }
     public MyFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        // TODO Auto-generated constructor stub
     }
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {

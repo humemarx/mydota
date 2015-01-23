@@ -53,7 +53,7 @@ public class VideoAdapter extends BaseAdapter {
         }
         if(viewvideo!=null){
             final String item_vid = (String) getItem(position);
-            initWebView(viewvideo.webview,item_vid);
+            initWebView(viewvideo.webview, item_vid);
         }
         return view;
     }
@@ -91,5 +91,6 @@ public class VideoAdapter extends BaseAdapter {
     }
     private final class ViewHolder {
         public WebView webview;
+        //public VideoView videoview;
     }
 }

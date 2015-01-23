@@ -55,17 +55,14 @@ public class HeroListFragment extends Fragment
         setHasOptionsMenu(true);
         android.content.Loader<Object> cLoader = getLoaderManager().getLoader(0);
         if (cLoader != null && savedInstanceState != null) {
-            menu_hero_query_keys = savedInstanceState
-                    .getStringArray(KEY_STATE_MENU_HERO_QUERY_KEYS);
+            menu_hero_query_keys = savedInstanceState.getStringArray(KEY_STATE_MENU_HERO_QUERY_KEYS);
         }
         getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_herodata, container,
-                false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        final View v = inflater.inflate(R.layout.fragment_herodata, container,false);
 
         mAdapter = new HeroListAdapter(this.getActivity());
         mAdapter.setFilterAccepter(mHeroListFilterAccepter);
@@ -81,8 +78,7 @@ public class HeroListFragment extends Fragment
      * 物品网格项 点击动作
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-                            long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
         Utils.startHeroDetailActivity(this.getActivity(),
                 (HeroItem) parent.getItemAtPosition(position));
     }

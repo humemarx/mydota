@@ -38,7 +38,7 @@ public final class DataManager {
     /**
      * 英雄列表数据 JSON 保存文件
      */
-    private final static String KEY_FILE_JOSN_HEROLIST = "herolist.json";
+    private final static String KEY_FILE_JOSN_HEROLIST = "myherolist.json";
     /**
      * 物品列表数据 JSON 保存文件
      */
@@ -463,6 +463,7 @@ public final class DataManager {
         cItem.roles_l = toStringArray(cJsonObj.optJSONArray("roles_l"));
 
         cItem.skill_video = toStringArray(cJsonObj.optJSONArray("skill_video"));
+        cItem.hero_video = toStringArray(cJsonObj.optJSONArray("hero_video"));
 
         cItem.nickname_l = toStringArray(cJsonObj.optJSONArray("nickname_l"));
         extractHeroStatsItem(cJsonObj.optJSONObject("statsall"), cItem);

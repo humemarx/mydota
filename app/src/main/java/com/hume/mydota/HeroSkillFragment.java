@@ -47,11 +47,10 @@ public class HeroSkillFragment extends FragmentActivity {
         try {
             herodata = DataManager.getHeroDetailItem(this,hero_keyname);//获取详细信息
             herolist = DataManager.getHeroItem(this,hero_keyname);//获取基本信息
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
         }
+
         ImageView image_hero = (ImageView)findViewById(R.id.image_hero);//英雄图像
         TextView text_hero_name_l = (TextView)findViewById(R.id.text_hero_name_l);//中文名称
         TextView text_hero_name = (TextView)findViewById(R.id.text_hero_name);//英文名称
